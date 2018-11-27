@@ -41,8 +41,6 @@ deploy.staging.step-3:
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-admin /bitnami/wordpress
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-blog-header.php /bitnami/wordpress
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-comments-post.php /bitnami/wordpress
-	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-config-sample.php /bitnami/wordpress
-	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-config.php /bitnami/wordpress
 	kubectl exec $(POD) -- rm -rf /bitnami/wordpress/wp-content
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-content /bitnami/wordpress
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-cron.php /bitnami/wordpress
