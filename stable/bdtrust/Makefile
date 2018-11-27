@@ -59,3 +59,8 @@ deploy.staging.step-4:
 	kubectl exec $(POD) -- gzip -d /benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz
 	sleep 2
 	kubectl exec $(POD) -- bash -c "mysql -ubn_wordpress -p7FWRF457P395SDCPL29H56C8 -hstaging-mariadb bitnami_wordpress < /benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql"
+
+database.backup:
+	kubectl exec $(POD) -- bash -c "mysqldump -ubn_wordpress -p7FWRF457P395SDCPL29H56C8 -hstaging-mariadb bitnami_wordpress > dump.sql"
+	kubectl cp $(POD):/dump.sql ~/Desktop/www-bdtrust-org-dump.sql
+	kubectl exec $(POD) -- rm dump.sql
