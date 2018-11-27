@@ -43,6 +43,7 @@ deploy.staging.step-3:
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-comments-post.php /bitnami/wordpress
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-config-sample.php /bitnami/wordpress
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-config.php /bitnami/wordpress
+	kubectl exec $(POD) -- rm -rf /bitnami/wordpress/wp-content
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-content /bitnami/wordpress
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-cron.php /bitnami/wordpress
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/wp-includes /bitnami/wordpress
@@ -56,8 +57,7 @@ deploy.staging.step-3:
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/xmlrpc.php /bitnami/wordpress
 
 deploy.staging.step-4:
-	kubectl cp ~/Desktop/benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz staging-bdtrust-78748cbd65-2kqv7:/benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz
+	kubectl cp ~/Desktop/benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz $(POD):/benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz
 	kubectl exec $(POD) -- gzip -d /benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz
 	sleep 2
-	kubectl exec $(POD) -- mysql -ubn_wordpress -p7FWRF457P395SDCPL29H56C8 -hstaging-mariadb bitnami_wordpress < cat /$(ARCHIVE_STRING)database.sql
-
+	kubectl exec $(POD) -- bash -c "mysql -ubn_wordpress -p7FWRF457P395SDCPL29H56C8 -hstaging-mariadb bitnami_wordpress < /benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql"
