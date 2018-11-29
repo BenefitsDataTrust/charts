@@ -28,7 +28,7 @@ deploy.staging.step-1: activate.bdt-eng-public
 
 deploy.staging.step-2:
 	gsutil cp gs://bdt-public-assets/$(ARCHIVE_STRING)code.tar.gz  ~/Desktop/
-	gsutil cp gs://bdt-public-assets/$(ARCHIVE_STRING)database.sql.gz  ~/Desktop/
+	gsutil cp gs://bdt-public-assets/www-bdtrust-org-dump.sql  ~/Desktop/
 	# gsutil cp gs://bdt-public-assets/$(ARCHIVE_STRING)files.tar.gz  ~/Desktop/ # this file is huge
 
 deploy.staging.step-3:
@@ -55,10 +55,9 @@ deploy.staging.step-3:
 	kubectl exec $(POD) -- mv -f /$(ARCHIVE_STRING)code/xmlrpc.php /bitnami/wordpress
 
 deploy.staging.step-4:
-	kubectl cp ~/Desktop/benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz $(POD):/benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz
-	kubectl exec $(POD) -- gzip -d /benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql.gz
+	kubectl cp ~/Desktop/www-bdtrust-org-dump.sql $(POD):/www-bdtrust-org-dump.sql
 	sleep 2
-	kubectl exec $(POD) -- bash -c "mysql -ubn_wordpress -p7FWRF457P395SDCPL29H56C8 -hstaging-mariadb bitnami_wordpress < /benefits-data-trust_live_2018-11-08T21-00-00_UTC_database.sql"
+	kubectl exec $(POD) -- bash -c "mysql -ubn_wordpress -p7FWRF457P395SDCPL29H56C8 -hstaging-mariadb bitnami_wordpress < /www-bdtrust-org-dump.sql"
 
 database.backup:
 	kubectl exec $(POD) -- bash -c "mysqldump -ubn_wordpress -p7FWRF457P395SDCPL29H56C8 -hstaging-mariadb bitnami_wordpress > dump.sql"
